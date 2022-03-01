@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  nginx:
+    build: ./.docker/nginx
+    networks: 
+      - node-network
+    ports: 
+      - "8080:80"
+    depends_on: 
+      - app 
+
   app:
     build: .
     networks: 
@@ -8,18 +17,16 @@ services:
     volumes: 
       - .:/usr/src/app
     tty: true
-    ports: 
-      - "3000:3000"
     depends_on: 
        - db
 
   db:
-    image: mysql:5.7
+    build: ./.docker/mysql
     command: --innodb-use-native-aio=0
     tty: true
     volumes: 
-      - ./.docker/mysql:/var/lib/mysql
-      - ./.docker/initdb:/docker-entrypoint-initdb.d
+      - ./.docker/mysql/data:/var/lib/mysql
+      - ./.docker/mysql/initdb:/docker-entrypoint-initdb.d
     environment: 
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
