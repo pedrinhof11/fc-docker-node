@@ -27,7 +27,7 @@ app.get("/", async (_, response) => {
   const data = await getPersons();
   response.send(`
         <h1>Full Cycle Rocks!</h1>
-        <hr/>
+        <hr>
         <ul>
             ${data.map((people) => `<li>${people.name}</li>`).join("")}
         </ul>
